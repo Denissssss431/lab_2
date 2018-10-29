@@ -39,6 +39,64 @@ Matrix & Matrix::operator = (const Matrix & other) {
 	}
 }
 
+bool Matrix:: operator == (const Matrix & other) const {
+	if (other.getRow() != this->row || other.getColumn() != this->column)
+	{
+		return false;
+	}
+	else
+	{
+		for (int i = 0; i < row; i++) {
+			for (int j = 0; j < column; j++) {
+				if ((pmas + i * column)[j] == other[i][j])
+					return false;
+			}
+		}
+	}
+	return true;
+}
+
+Matrix & Matrix::operator + (const Matrix & other) {
+
+	for (int i = 0; i < row; i++) {
+		for (int j = 0; j < column; j++) {
+			if ((pmas + i * column)[j] += other[i][j]);
+		}
+	}
+}
+
+Matrix & Matrix::operator - (const Matrix & other) {
+
+	for (int i = 0; i < row; i++) {
+		for (int j = 0; j < column; j++) {
+			if ((pmas + i * column)[j] -= other[i][j]);
+		}
+	}
+}
+
+Matrix & Matrix::operator * (const Matrix & other) {
+
+	for (int i = 0; i < row; i++) {
+		for (int j = 0; j < column; j++) {
+			for (int t = 0; t < j; t++) {
+				if ((pmas + i * column)[j] *= other[t][j]);
+			}
+		}
+	}
+}
+
+Matrix & Matrix::operator * (const double & num) {
+	for (int i = 0; i < row; i++) {
+		for (int j = 0; j < column; j++) {
+			if ((pmas + i * column)[j] *= num);
+		}
+	}
+}
+
+Matrix & Matrix::operator ~ () {
+
+}
+
 std::ostream & operator<<(std::ostream & output, const Matrix & matr) // !!!
 {
 	for (size_t row = 0; row < matr.getRow(); ++row)
@@ -73,37 +131,3 @@ double * Matrix::operator[](const int & row) const
 	return (pmas + row * column);
 }
 
-bool Matrix:: operator == (const Matrix & other) const {
-	if (other.getRow() != this->row || other.getColumn() != this->column)
-	{
-		return false;
-	}
-	else 
-	{
-		for (int i = 0; i < row; i++) {
-			for (int j = 0; j < column; j++) {
-				if ((pmas + i * column)[j] == other[i][j])
-					return false;
-			}
-		}
-	}
-	return true;
-}
-
-Matrix & Matrix::operator + (const Matrix & other) {
-
-	for (int i = 0; i < row; i++) {
-		for (int j = 0; j < column; j++) {
-			if ((pmas + i * column)[j] += other[i][j]);
-		}
-	}
-}
-
-Matrix & Matrix::operator - (const Matrix & other) {
-
-	for (int i = 0; i < row; i++) {
-		for (int j = 0; j < column; j++) {
-			if ((pmas + i * column)[j] -= other[i][j]);
-		}
-	}
-}
