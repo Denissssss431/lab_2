@@ -37,6 +37,7 @@ Matrix & Matrix::operator = (const Matrix & other) {
 			(pmas + i * column)[j] = other[i][j];
 		}
 	}
+	return *this;
 }
 
 bool Matrix:: operator == (const Matrix & other) const {
@@ -57,44 +58,64 @@ bool Matrix:: operator == (const Matrix & other) const {
 }
 
 Matrix & Matrix::operator + (const Matrix & other) {
-
+	Matrix a;
 	for (int i = 0; i < row; i++) {
 		for (int j = 0; j < column; j++) {
-			if ((pmas + i * column)[j] += other[i][j]);
+			a[i][j]=(pmas + i * column)[j] + other[i][j];
 		}
 	}
+	return a;
 }
 
 Matrix & Matrix::operator - (const Matrix & other) {
-
+	Matrix a;
 	for (int i = 0; i < row; i++) {
 		for (int j = 0; j < column; j++) {
-			if ((pmas + i * column)[j] -= other[i][j]);
+			a[i][j]=(pmas + i * column)[j] - other[i][j];
 		}
 	}
+	return a;
 }
 
 Matrix & Matrix::operator * (const Matrix & other) {
-
+	Matrix a;
 	for (int i = 0; i < row; i++) {
 		for (int j = 0; j < column; j++) {
-			for (int t = 0; t < j; t++) {
-				if ((pmas + i * column)[j] *= other[t][j]);
+			a[i][j] = 0;
+		}
+	}
+	if (other.getRow() == this->getColumn()) {
+		for (int i = 0; i < row; i++) {
+			for (int j = 0; j < column; j++) {
+				for (int t = 0; t < j; t++) {
+					a[i][j] += (pmas + i * column)[t] * other[t][j];
+				}
 			}
 		}
 	}
+	return a;
 }
 
 Matrix & Matrix::operator * (const double & num) {
+	Matrix a;
 	for (int i = 0; i < row; i++) {
 		for (int j = 0; j < column; j++) {
-			if ((pmas + i * column)[j] *= num);
+			a [i][j]= (pmas + i * column)[j] * num;
 		}
 	}
+	return a;
 }
 
 Matrix & Matrix::operator ~ () {
-
+	double temp=0;
+	for (int i = 0; i < row; i++) {
+		for (int j = 0; j < column; j++) {
+			temp = (pmas + i * column)[j];
+			(pmas + i * column)[j] == (pmas + j * column)[i];
+			(pmas + j * column)[i]=temp;
+		}
+	}
+	return *this;
 }
 
 std::ostream & operator<<(std::ostream & output, const Matrix & matr) // !!!
