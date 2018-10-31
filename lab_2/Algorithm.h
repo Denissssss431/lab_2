@@ -6,4 +6,5 @@ public:
 	~Algoritm();
 private:
 	Matrix *pMatrix;
+
 };	
