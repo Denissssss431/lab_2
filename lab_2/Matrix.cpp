@@ -1,6 +1,7 @@
 #include <iostream>
 #include "Matrix.h"
 #include <string>
+#include <time.h>
 using namespace std;
 
 
@@ -152,3 +153,46 @@ double * Matrix::operator[](const int & row) const
 	return (pmas + row * column);
 }
 
+void Matrix::randomMatrix(Matrix &matr)
+{
+	srand(time(0));
+
+	for (int i = 0; i < row; i++)
+	{
+		for (int j = 0; j < column; j++)
+		{
+			matr[i][j] = 1 + rand() % 200;
+		}
+	}
+}
+
+void Matrix::simmetricMatrix(Matrix &matr)
+{
+	srand(time(0));
+
+	for (int i = 0; i < row; i++)
+	{
+		for (int j = 0; j < column; j++)
+		{
+			if (i == j)
+			{
+				matr[i][j] = 1 + rand() % 200;
+			}
+			else
+			{
+				matr[i][j] = matr[j][i] = 1 + rand() % 200;
+			}
+		}
+	}
+}
+
+void Matrix::hilbertMatrix(Matrix &matr)
+{
+	for (int i = 1; i <= row; i++)
+	{
+		for (int j = 1; j <= column; j++)
+		{
+			matr[i - 1][j - 1] = 1.0 / double(i + j - 1);
+		}
+	}
+}

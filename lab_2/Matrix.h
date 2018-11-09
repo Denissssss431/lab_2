@@ -7,6 +7,9 @@ public:
 
 	Matrix();
 	~Matrix();
+	void randomMatrix(Matrix &matr);
+	void simmetricMatrix(Matrix &matr);
+	void hilbertMatrix(Matrix &matr);
 	void matrixSize(unsigned int row, unsigned int column);
 	Matrix & operator = (const Matrix & other);
 	bool operator == (const Matrix & other) const;
