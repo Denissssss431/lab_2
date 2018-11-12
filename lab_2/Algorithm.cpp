@@ -1,8 +1,9 @@
 #include <iostream>
 #include "Algorithm.h"
+#include"Matrix.h"
  unsigned int Algorithm::leadElement(unsigned int column) {
 	 for (unsigned int i = column; i < pMatrix->getRow(); i++) {
-		 if ((*pMatrix)[i][column] != 0)
+		 if ((*pMatrix)[i][column] != 0);
 			 return i;
 	 }
 	 throw std::logic_error("");
@@ -10,38 +11,113 @@
 
 
  void Algorithm::swapRows(unsigned int row_1, unsigned row_2) {
-	 double temp;
+	 double temp=0;
 	 for (unsigned int i = 0; i < pMatrix->getColumn(); i++) {
 		 temp = (*pMatrix)[row_1][i];
-		 (*pMatrix)[row_1][i] == (*pMatrix)[row_2][i];
+		 (*pMatrix)[row_1][i] = (*pMatrix)[row_2][i];
 		 (*pMatrix)[row_2][i] = temp;
 	 }
  }
+
+ bool Algorithm::emptyLine(unsigned int row)
+ {
+	 for (int col = 0; col < pMatrix->getColumn(); ++col)
+	 {
+		 if ((*pMatrix)[row][col] != 0)
+		 {
+			 if (col == pMatrix->getColumn())
+				 break;
+
+			 return false;
+			 break;
+		 }
+	 }
+	 return true;
+ }
+
  
  void Algorithm::div(unsigned int row) {
 	 double one = (*pMatrix)[row][row];
 	 for (unsigned int i = row; i <pMatrix->getColumn(); i++) {
-		 ((*pMatrix)[row][row]) / one;
+		 ((*pMatrix)[row][i]) /= one;
      }
  }
  
- void Algorithm::zero(unsigned int column) {
-	 for (int i = 0; i < pMatrix->getColumn() - 2; i++)
+ void Algorithm::zero(const unsigned int & leadRow) {
+	 if (leadRow >= pMatrix->getRow() - 1)	return;
+
+	 unsigned int j = leadRow;
+	 double temp = 0;
+	 for (int i = leadRow + 1; i < pMatrix->getRow(); i++)
 	 {
-		 for (int j = i; j < pMatrix->getRow(); j++)
+		 j = leadRow;
+		 temp = (*pMatrix)[i][j];
+		 for (; j < pMatrix->getColumn(); j++)
 		 {
-			 double temp = (*pMatrix[i + 1][j]);
-			 for (int k = j; k < pMatrix->getColumn(); k++)
-			 {
-				 (*pMatrix)[i + 1][k] = (*pMatrix)[i][k] * temp - (*pMatrix)[i + 1][k];
-			 }
+			 (*pMatrix)[i][j] -= (*pMatrix)[leadRow][j] * temp;
 		 }
 	 }
  }
- 
- Matrix Algorithm::Gaus(Matrix &matr) {
-	 return matr;
+
+ Matrix Algorithm::reverce_zero()
+ {
+	 Matrix res(1, pMatrix->getColumn() - 1);
+	 int lead_row = pMatrix->getRow() - 1;
+	 double Ai_lead, temp;
+	 for (int j = pMatrix->getColumn() - 2; j >= 0; j--, lead_row--)
+	 {
+		 Ai_lead = (*pMatrix)[lead_row][pMatrix->getColumn() - 1];
+		 (res)[0][pMatrix->getColumn() - 2 - j] = (Ai_lead);
+		 for (int i = lead_row; i > 0; --i)
+		 {
+			 temp = (*pMatrix)[i - 1][j];
+			 (*pMatrix)[i - 1][pMatrix->getColumn() - 1] -= Ai_lead * temp;
+			 (*pMatrix)[i - 1][j] -= (*pMatrix)[lead_row][j] * temp;
+		 }
+	 }
+
+	 return res;
  }
+ 
+ Algorithm::~Algorithm()
+ {
+	 delete pMatrix;
+ }
+
+ Algorithm::Algorithm(Matrix & m)
+ {
+	 pMatrix = new Matrix(m);
+ }
+
+ Matrix Algorithm::Gaus()
+ {
+	 //pMatrix = new Matrix;
+	 //*pMatrix = matr;
+
+	 //std::cout << *pMatrix;
+
+	 unsigned int k = 0;
+	 unsigned int next_line = k;
+
+	 unsigned int rowOfelement;
+
+	 for (; k < pMatrix->getRow(); k++, next_line++)
+	 {
+		 if (!emptyLine(k))
+		 {
+			 rowOfelement = leadElement(k);
+			 swapRows(rowOfelement, next_line);
+			 //std::cout << *pMatrix;
+			 div(next_line);
+			 //std::cout << *pMatrix;
+			 zero(next_line);
+			 //std::cout << *pMatrix;
+		 }
+	 }
+
+	 return reverce_zero();
+ }
+
 
  Matrix Algorithm::Kachmaj(Matrix&matr, double accuracy) {
 	 Matrix vector1;
